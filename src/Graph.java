@@ -11,6 +11,7 @@ public class Graph {
 	private int[] dist;
 	private int[] pathRecord;
 	private boolean[] visit;
+	private LinkedList<Integer> path;
 
 	public Graph(ArrayList<ArrayList<Integer>> cells) {
 		start = 0;
@@ -23,14 +24,14 @@ public class Graph {
 			pathRecord[i] = -1;
 			visit[i] = false;
 		}
+		
+		path = new LinkedList<Integer>();
 		this.cells = cells;
 	}
 
-	public void printBFSPath() {
+	public void BFSPath() {
 
 		BFS();
-
-		LinkedList<Integer> path = new LinkedList<Integer>();
 
 		int temp = dest;
 		path.add(temp);
@@ -39,22 +40,8 @@ public class Graph {
 			temp = pathRecord[temp];
 		}
 
-		System.out.print("Path :");
-		for (int i = path.size() - 1; i >= 0; i--) {
-			System.out.print(path.get(i) + " ");
-		}
-		System.out.println();
-		System.out.println("Length of path: " + dist[dest]);
-		int visitCount = 0;
-		for (int i = 0; i < visit.length; i++) {
-			if (visit[i]) {
-				visitCount++;
-			}
-		}
-		System.out.println("Visited cells: " + visitCount);
 	}
-	
-	
+
 	public void BFS() {
 
 		LinkedList<Integer> queue = new LinkedList<Integer>();
@@ -79,5 +66,47 @@ public class Graph {
 			}
 		}
 	}
+
+	public int[] getDist() {
+		return dist;
+	}
+
+	public void setDist(int[] dist) {
+		this.dist = dist;
+	}
+
+	public int[] getPathRecord() {
+		return pathRecord;
+	}
+
+	public void setPathRecord(int[] pathRecord) {
+		this.pathRecord = pathRecord;
+	}
+
+	public boolean[] getVisit() {
+		return visit;
+	}
+
+	public void setVisit(boolean[] visit) {
+		this.visit = visit;
+	}
+
+	public LinkedList<Integer> getPath() {
+		return path;
+	}
+
+	public void setPath(LinkedList<Integer> path) {
+		this.path = path;
+	}
+
+	public int getDest() {
+		return dest;
+	}
+
+	public void setDest(int dest) {
+		this.dest = dest;
+	}
+	
+	
 
 }

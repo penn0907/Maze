@@ -141,9 +141,7 @@ public class MazeGenerator {
 
 	public static int[] getXYbyNum(int num, int n) {
 
-		int[] result = { num % n, num / n };
-
-		return result;
+		return new int[]{ num % n, num / n };
 	}
 
 	public ArrayList<ArrayList<Integer>> getCells() {
@@ -156,7 +154,8 @@ public class MazeGenerator {
 
 	public static void main(String[] args) {
 
-		MazeGenerator maze = new MazeGenerator(3);
+		int r = 3;
+		MazeGenerator maze = new MazeGenerator(r);
 
 		maze.displayCells();
 		maze.displayMaze();
@@ -167,7 +166,23 @@ public class MazeGenerator {
 		}
 		
 		Graph g = new Graph(maze.getCells());
-		g.printBFSPath();
+		g.BFSPath();
+		
+		System.out.print("Path :");
+		for (int i = g.getPath().size() - 1; i >= 0; i--) {
+			int num = g.getPath().get(i);
+			int[] xy = MazeGenerator.getXYbyNum(num, r);
+			System.out.print("(" + xy[0] + ", " + xy[1] +") ");
+		}
+		System.out.println();
+		System.out.println("Length of path: " + g.getDist()[g.getDest()]);
+		int visitCount = 0;
+		for (int i = 0; i < g.getVisit().length; i++) {
+			if (g.getVisit()[i]) {
+				visitCount++;
+			}
+		}
+		System.out.println("Visited cells: " + visitCount);
 	}
 
 }
