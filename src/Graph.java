@@ -3,7 +3,7 @@ import java.util.LinkedList;
 
 public class Graph {
 
-	private ArrayList<ArrayList<Integer>> cells;
+	private ArrayList<LinkedList<Integer>> cells;
 
 	private int start;
 	private int dest;
@@ -13,7 +13,7 @@ public class Graph {
 	private boolean[] visit;
 	private LinkedList<Integer> path;
 
-	public Graph(ArrayList<ArrayList<Integer>> cells) {
+	public Graph(ArrayList<LinkedList<Integer>> cells) {
 		start = 0;
 		dest = cells.size() - 1;
 		dist = new int[cells.size()];

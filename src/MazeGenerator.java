@@ -1,4 +1,5 @@
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -12,7 +13,7 @@ public class MazeGenerator {
 	private final int r;
 	// stores the cells
 	private final int[][] maze;
-	private ArrayList<ArrayList<Integer>> cells;
+	private ArrayList<LinkedList<Integer>> cells;
 
 	public void setAdj() {
 		for (int i = 0; i < r; i++) {
@@ -38,9 +39,9 @@ public class MazeGenerator {
 	public MazeGenerator(int r) {
 		this.r = r;
 		maze = new int[this.r][this.r];
-		cells = new ArrayList<ArrayList<Integer>>(r * r);
+		cells = new ArrayList<LinkedList<Integer>>(r * r);
 		for (int i = 0; i < r * r; i++) {
-			cells.add(new ArrayList<Integer>());
+			cells.add(new LinkedList<Integer>());
 		}
 		generateMaze(0, 0);
 
@@ -144,11 +145,11 @@ public class MazeGenerator {
 		return new int[]{ num % n, num / n };
 	}
 
-	public ArrayList<ArrayList<Integer>> getCells() {
+	public ArrayList<LinkedList<Integer>> getCells() {
 		return cells;
 	}
 
-	public void setCells(ArrayList<ArrayList<Integer>> cells) {
+	public void setCells(ArrayList<LinkedList<Integer>> cells) {
 		this.cells = cells;
 	}
 
@@ -160,7 +161,7 @@ public class MazeGenerator {
 		maze.displayCells();
 		maze.displayMaze();
 		maze.setAdj();
-		ArrayList<ArrayList<Integer>> c = maze.getCells();
+		ArrayList<LinkedList<Integer>> c = maze.getCells();
 		for (int i = 0; i < c.size(); i++) {
 			System.out.println(i + ": " + c.get(i).toString());
 		}
