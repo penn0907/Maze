@@ -155,7 +155,7 @@ public class MazeGenerator {
 
 	public static void main(String[] args) {
 
-		int r = 3;
+		int r = 5;
 		MazeGenerator maze = new MazeGenerator(r);
 
 		maze.displayCells();
@@ -167,6 +167,7 @@ public class MazeGenerator {
 		}
 		
 		Graph g = new Graph(maze.getCells());
+		Graph h = new Graph(maze.getCells());
 		g.BFSPath();
 		
 		System.out.print("Path :");
