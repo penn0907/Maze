@@ -15,7 +15,6 @@ public class MazeGenerator {
 	private final int[][] maze;
 	private ArrayList<LinkedList<Integer>> cells;
 
-	
 	// Constructor
 	public MazeGenerator(int r) {
 		this.r = r;
@@ -27,7 +26,7 @@ public class MazeGenerator {
 		generateMaze(0, 0);
 		setAdj();
 	}
-	
+
 	/**
 	 * set up adjacency list cells
 	 */
@@ -83,7 +82,7 @@ public class MazeGenerator {
 			// draw the west edge
 			for (int j = 0; j < r; j++) {
 				int num = getNumByXY(j, i, r);
-				String temp = discoverTime[num] >= 0 ? discoverTime[num] + "" : " ";
+				String temp = discoverTime[num] >= 0 ? discoverTime[num] % 10 + "" : " ";
 				System.out.print((maze[i][j] & 8) == 0 ? "| " + temp + " " : "  " + temp + " ");
 			}
 			System.out.println("|");
@@ -94,29 +93,29 @@ public class MazeGenerator {
 		}
 		System.out.println("+");
 	}
-	
+
 	// prints the maze with the cells and walls removed
-		public void displayShortestPath(LinkedList<Integer> path) {
-			for (int i = 0; i < r; i++) {
-				// draw the north edge
-				for (int j = 0; j < r; j++) {
-					System.out.print((maze[i][j] & 1) == 0 ? "+---" : "+   ");
-				}
-				System.out.println("+");
-				// draw the west edge
-				for (int j = 0; j < r; j++) {
-					int num = getNumByXY(j, i, r);
-					String temp = path.contains(num) ? "#" + "" : " ";
-					System.out.print((maze[i][j] & 8) == 0 ? "| " + temp + " " : "  " + temp + " ");
-				}
-				System.out.println("|");
-			}
-			// draw the bottom line
+	public void displayShortestPath(LinkedList<Integer> path) {
+		for (int i = 0; i < r; i++) {
+			// draw the north edge
 			for (int j = 0; j < r; j++) {
-				System.out.print("+---");
+				System.out.print((maze[i][j] & 1) == 0 ? "+---" : "+   ");
 			}
 			System.out.println("+");
+			// draw the west edge
+			for (int j = 0; j < r; j++) {
+				int num = getNumByXY(j, i, r);
+				String temp = path.contains(num) ? "#" + "" : " ";
+				System.out.print((maze[i][j] & 8) == 0 ? "| " + temp + " " : "  " + temp + " ");
+			}
+			System.out.println("|");
 		}
+		// draw the bottom line
+		for (int j = 0; j < r; j++) {
+			System.out.print("+---");
+		}
+		System.out.println("+");
+	}
 
 	// recursive perfect maze generator, using a modified DFS
 	// (cx,cy) coordinates of current cell, and (nx,ny) coordinates of neighbor cell

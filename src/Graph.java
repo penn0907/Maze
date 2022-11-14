@@ -213,8 +213,8 @@ public class Graph {
 	
 	public static void main(String[] args) {
 		
-		Graph g = new Graph(3);
-		g.DFS();
-		//g.BFSPath();
+		Graph g = new Graph(4);
+		//g.DFS();
+		g.BFSPath();
 	}
 }
