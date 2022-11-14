@@ -15,6 +15,22 @@ public class MazeGenerator {
 	private final int[][] maze;
 	private ArrayList<LinkedList<Integer>> cells;
 
+	
+	// Constructor
+	public MazeGenerator(int r) {
+		this.r = r;
+		maze = new int[this.r][this.r];
+		cells = new ArrayList<LinkedList<Integer>>(r * r);
+		for (int i = 0; i < r * r; i++) {
+			cells.add(new LinkedList<Integer>());
+		}
+		generateMaze(0, 0);
+		setAdj();
+	}
+	
+	/**
+	 * set up adjacency list cells
+	 */
 	public void setAdj() {
 		for (int i = 0; i < r; i++) {
 			for (int j = 0; j < r; j++) {
@@ -33,18 +49,6 @@ public class MazeGenerator {
 				}
 			}
 		}
-	}
-
-	// Constructor
-	public MazeGenerator(int r) {
-		this.r = r;
-		maze = new int[this.r][this.r];
-		cells = new ArrayList<LinkedList<Integer>>(r * r);
-		for (int i = 0; i < r * r; i++) {
-			cells.add(new LinkedList<Integer>());
-		}
-		generateMaze(0, 0);
-
 	}
 
 	// prints the maze with the cells and walls removed
@@ -67,6 +71,52 @@ public class MazeGenerator {
 		}
 		System.out.println("+");
 	}
+
+	// prints the maze with the cells and walls removed
+	public void displayMazeVisited(int[] discoverTime) {
+		for (int i = 0; i < r; i++) {
+			// draw the north edge
+			for (int j = 0; j < r; j++) {
+				System.out.print((maze[i][j] & 1) == 0 ? "+---" : "+   ");
+			}
+			System.out.println("+");
+			// draw the west edge
+			for (int j = 0; j < r; j++) {
+				int num = getNumByXY(j, i, r);
+				String temp = discoverTime[num] >= 0 ? discoverTime[num] + "" : " ";
+				System.out.print((maze[i][j] & 8) == 0 ? "| " + temp + " " : "  " + temp + " ");
+			}
+			System.out.println("|");
+		}
+		// draw the bottom line
+		for (int j = 0; j < r; j++) {
+			System.out.print("+---");
+		}
+		System.out.println("+");
+	}
+	
+	// prints the maze with the cells and walls removed
+		public void displayShortestPath(LinkedList<Integer> path) {
+			for (int i = 0; i < r; i++) {
+				// draw the north edge
+				for (int j = 0; j < r; j++) {
+					System.out.print((maze[i][j] & 1) == 0 ? "+---" : "+   ");
+				}
+				System.out.println("+");
+				// draw the west edge
+				for (int j = 0; j < r; j++) {
+					int num = getNumByXY(j, i, r);
+					String temp = path.contains(num) ? "#" + "" : " ";
+					System.out.print((maze[i][j] & 8) == 0 ? "| " + temp + " " : "  " + temp + " ");
+				}
+				System.out.println("|");
+			}
+			// draw the bottom line
+			for (int j = 0; j < r; j++) {
+				System.out.print("+---");
+			}
+			System.out.println("+");
+		}
 
 	// recursive perfect maze generator, using a modified DFS
 	// (cx,cy) coordinates of current cell, and (nx,ny) coordinates of neighbor cell
@@ -135,56 +185,33 @@ public class MazeGenerator {
 
 	};
 
-	public static int getNumByXY(int x, int y, int n) {
+	/**
+	 * convert x-y coordinate to 1 digit
+	 * 
+	 * @param x
+	 * @param y
+	 * @param n
+	 * @return
+	 */
+	public int getNumByXY(int x, int y, int n) {
 
 		return y * n + x;
 	}
 
-	public static int[] getXYbyNum(int num, int n) {
+	/**
+	 * convert 1 digit to x-y coordinate
+	 * 
+	 * @param num
+	 * @param n
+	 * @return
+	 */
+	public int[] getXYbyNum(int num, int n) {
 
-		return new int[]{ num % n, num / n };
+		return new int[] { num % n, num / n };
 	}
 
 	public ArrayList<LinkedList<Integer>> getCells() {
 		return cells;
-	}
-
-	public void setCells(ArrayList<LinkedList<Integer>> cells) {
-		this.cells = cells;
-	}
-
-	public static void main(String[] args) {
-
-		int r = 5;
-		MazeGenerator maze = new MazeGenerator(r);
-
-		maze.displayCells();
-		maze.displayMaze();
-		maze.setAdj();
-		ArrayList<LinkedList<Integer>> c = maze.getCells();
-		for (int i = 0; i < c.size(); i++) {
-			System.out.println(i + ": " + c.get(i).toString());
-		}
-		
-		Graph g = new Graph(maze.getCells());
-		Graph h = new Graph(maze.getCells());
-		g.BFSPath();
-		
-		System.out.print("Path :");
-		for (int i = g.getPath().size() - 1; i >= 0; i--) {
-			int num = g.getPath().get(i);
-			int[] xy = MazeGenerator.getXYbyNum(num, r);
-			System.out.print("(" + xy[0] + ", " + xy[1] +") ");
-		}
-		System.out.println();
-		System.out.println("Length of path: " + g.getDist()[g.getDest()]);
-		int visitCount = 0;
-		for (int i = 0; i < g.getVisit().length; i++) {
-			if (g.getVisit()[i]) {
-				visitCount++;
-			}
-		}
-		System.out.println("Visited cells: " + visitCount);
 	}
 
 }

@@ -13,13 +13,18 @@ import java.util.Stack;
 
 public class Graph {
 
+	private int r;
+	private MazeGenerator maze;
+	
 	private ArrayList<LinkedList<Integer>> cells;
 
 	private int start;
 	private int dest;
 
+	private int dicoverTimeCount;
 	private int[] dist;
-	private int[] pathRecord;
+	private int[] discoverTime;
+	private int[] parent;
 	private boolean[] visit;
 	private LinkedList<Integer> path;
 	
@@ -27,13 +32,19 @@ public class Graph {
 	private int[][] pathing; //Kevin's implementation
 	private int sides; //Kevin's implementation
 
-	public Graph(ArrayList<LinkedList<Integer>> cells) {
+	public Graph(int r) {
+		this.r = r;
+		this.maze = new MazeGenerator(r);
+		cells = maze.getCells();
+		
 		visitCount = 0; //Kevin's implementation
 		sides = (int) Math.sqrt(cells.size());
 		
+		dicoverTimeCount = 0;
 		start = 0;
 		dest = cells.size() - 1;
 		dist = new int[cells.size()];
+		discoverTime = new int[cells.size()];
 		
 		
 		pathing = new int[sides][sides]; //Kevin's implementation
@@ -43,16 +54,18 @@ public class Graph {
 			}
 		}
 		
-		pathRecord = new int[cells.size()];
+		parent = new int[cells.size()];
 		visit = new boolean[cells.size()];
 		for (int i = 0; i < cells.size(); i++) {
 			dist[i] = -1;
-			pathRecord[i] = -1;
+			discoverTime[i] = -1;
+			parent[i] = -1;
 			visit[i] = false;
 		}
 		
 		path = new LinkedList<Integer>();
 		this.cells = cells;
+		maze.displayMaze();
 	}
 
 	public void BFSPath() {
@@ -61,10 +74,12 @@ public class Graph {
 
 		int temp = dest;
 		path.add(temp);
-		while (pathRecord[temp] != -1) {
-			path.add(pathRecord[temp]);
-			temp = pathRecord[temp];
+		while (parent[temp] != -1) {
+			path.add(parent[temp]);
+			temp = parent[temp];
 		}
+		
+		printGraphResult();
 
 	}
 
@@ -73,7 +88,9 @@ public class Graph {
 		LinkedList<Integer> queue = new LinkedList<Integer>();
 
 		visit[start] = true;
+		visitCount++;
 		dist[start] = 0;
+		discoverTime[start] = 0;
 		queue.add(start);
 
 		while (!queue.isEmpty()) {
@@ -82,15 +99,37 @@ public class Graph {
 				int adj = cells.get(q).get(i);
 				if (visit[adj] == false) {
 					visit[adj] = true;
+					visitCount++;
 					dist[adj] = dist[q] + 1;
-					pathRecord[adj] = q;
+					discoverTime[adj] = ++dicoverTimeCount;
+					parent[adj] = q;
 					queue.add(adj);
-
+					
 					if (adj == dest)
-						break;
+						return;
 				}
 			}
 		}
+	}
+	
+	public void printGraphResult() {
+		System.out.println("BFS:");
+		maze.displayMazeVisited(discoverTime);
+		System.out.println();
+		maze.displayShortestPath(path);
+		System.out.println("Length of path: " + (dist[dest] + 1));
+		displayPath();
+		System.out.println("Visited cells: " + visitCount);
+	}
+	
+	private void displayPath() {
+		System.out.print("Path :");
+		for (int i = path.size() - 1; i >= 0; i--) {
+			int num = path.get(i);
+			int[] xy = maze.getXYbyNum(num, r);
+			System.out.print("(" + xy[0] + ", " + xy[1] + ") ");
+		}
+		System.out.println();
 	}
 
 	public void DFS() {
@@ -126,50 +165,6 @@ public class Graph {
 				DFSHelper(stack, found);
 			}
 		}
-	}
-	
-	public int[] getDist() {
-		return dist;
-	}
-
-	public void setDist(int[] dist) {
-		this.dist = dist;
-	}
-
-	public int[] getPathRecord() {
-		return pathRecord;
-	}
-
-	public void setPathRecord(int[] pathRecord) {
-		this.pathRecord = pathRecord;
-	}
-
-	public boolean[] getVisit() {
-		return visit;
-	}
-
-	public void setVisit(boolean[] visit) {
-		this.visit = visit;
-	}
-
-	public LinkedList<Integer> getPath() {
-		return path;
-	}
-
-	public void setPath(LinkedList<Integer> path) {
-		this.path = path;
-	}
-
-	public int getDest() {
-		return dest;
-	}
-
-	public void setDest(int dest) {
-		this.dest = dest;
-	}
-	
-	public int getVisitCount() { //Kevin's implementations
-		return visitCount;
 	}
 	
 	public static void toString(int[][] arr) { //Kevin's implementations
@@ -217,14 +212,9 @@ public class Graph {
 	}
 	
 	public static void main(String[] args) {
-		int r = 3;
-		MazeGenerator maze = new MazeGenerator(r);
-
-		maze.displayCells();
-		maze.displayMaze();
-		maze.setAdj();
 		
-		Graph g = new Graph(maze.getCells());
+		Graph g = new Graph(3);
 		g.DFS();
+		//g.BFSPath();
 	}
 }
