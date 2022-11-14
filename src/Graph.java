@@ -36,7 +36,14 @@ public class Graph {
 		this.r = r;
 		this.maze = new MazeGenerator(r);
 		cells = maze.getCells();
+		this.cells = cells;
 		
+		initialization();
+		
+		maze.displayMaze();
+	}
+	
+	private void initialization() {
 		visitCount = 0; //Kevin's implementation
 		sides = (int) Math.sqrt(cells.size());
 		
@@ -64,12 +71,13 @@ public class Graph {
 		}
 		
 		path = new LinkedList<Integer>();
-		this.cells = cells;
-		maze.displayMaze();
+		
 	}
 
 	public void BFSPath() {
 
+		//restore the variables
+		initialization();
 		BFS();
 
 		int temp = dest;
@@ -113,6 +121,7 @@ public class Graph {
 	}
 	
 	public void printGraphResult() {
+		initialization();
 		System.out.println("BFS:");
 		maze.displayMazeVisited(discoverTime);
 		System.out.println();
