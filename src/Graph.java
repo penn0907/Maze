@@ -35,9 +35,8 @@ public class Graph {
 	public Graph(int r) {
 		this.r = r;
 		this.maze = new MazeGenerator(r);
-		cells = maze.getCells();
-		this.cells = cells;
-		
+		this.cells = maze.getCells();
+
 		initialization();
 		
 		maze.displayMaze();
@@ -121,7 +120,7 @@ public class Graph {
 	}
 	
 	public void printGraphResult() {
-		initialization();
+		
 		System.out.println("BFS:");
 		maze.displayMazeVisited(discoverTime);
 		System.out.println();
@@ -142,7 +141,7 @@ public class Graph {
 	}
 
 	public void DFS() {
-		
+		initialization();
 		Stack<Integer> stack = new Stack<>();
 		stack.push(start);
 		boolean found = false;
