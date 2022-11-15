@@ -9,9 +9,9 @@ import java.util.Arrays;
  * http://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking
  */
 public class MazeGenerator {
-	// coordinates row x, column y
+	// Coordinates row x, column y
 	private final int r;
-	// stores the cells
+	// Stores the cells
 	private final int[][] maze;
 	private ArrayList<LinkedList<Integer>> cells;
 
@@ -28,7 +28,7 @@ public class MazeGenerator {
 	}
 
 	/**
-	 * set up adjacency list cells
+	 * Sets up adjacency list cells
 	 */
 	public void setAdj() {
 		for (int i = 0; i < r; i++) {
@@ -50,36 +50,36 @@ public class MazeGenerator {
 		}
 	}
 
-	// prints the maze with the cells and walls removed
+	// Prints the maze with the cells and walls removed
 	public void displayMaze() {
 		for (int i = 0; i < r; i++) {
-			// draw the north edge
+			// Draws the north edge
 			for (int j = 0; j < r; j++) {
 				System.out.print((maze[i][j] & 1) == 0 ? "+---" : "+   ");
 			}
 			System.out.println("+");
-			// draw the west edge
+			// Draws the west edge
 			for (int j = 0; j < r; j++) {
 				System.out.print((maze[i][j] & 8) == 0 ? "|   " : "    ");
 			}
 			System.out.println("|");
 		}
-		// draw the bottom line
+		// Draws the bottom line
 		for (int j = 0; j < r; j++) {
 			System.out.print("+---");
 		}
 		System.out.println("+");
 	}
 
-	// prints the maze with the cells and walls removed
+	// Prints the maze with the cells and walls removed
 	public void displayMazeVisited(int[] discoverTime) {
 		for (int i = 0; i < r; i++) {
-			// draw the north edge
+			// Draws the north edge
 			for (int j = 0; j < r; j++) {
 				System.out.print((maze[i][j] & 1) == 0 ? "+---" : "+   ");
 			}
 			System.out.println("+");
-			// draw the west edge
+			// Draws the west edge
 			for (int j = 0; j < r; j++) {
 				int num = getNumByXY(j, i, r);
 				String temp = discoverTime[num] >= 0 ? discoverTime[num] % 10 + "" : " ";
@@ -87,22 +87,22 @@ public class MazeGenerator {
 			}
 			System.out.println("|");
 		}
-		// draw the bottom line
+		// Draws the bottom line
 		for (int j = 0; j < r; j++) {
 			System.out.print("+---");
 		}
 		System.out.println("+");
 	}
 
-	// prints the maze with the cells and walls removed
+	// Prints the maze with the cells and walls removed
 	public void displayShortestPath(LinkedList<Integer> path) {
 		for (int i = 0; i < r; i++) {
-			// draw the north edge
+			// Draws the north edge
 			for (int j = 0; j < r; j++) {
 				System.out.print((maze[i][j] & 1) == 0 ? "+---" : "+   ");
 			}
 			System.out.println("+");
-			// draw the west edge
+			// Draws the west edge
 			for (int j = 0; j < r; j++) {
 				int num = getNumByXY(j, i, r);
 				String temp = path.contains(num) ? "#" + "" : " ";
@@ -110,39 +110,39 @@ public class MazeGenerator {
 			}
 			System.out.println("|");
 		}
-		// draw the bottom line
+		// Draws the bottom line
 		for (int j = 0; j < r; j++) {
 			System.out.print("+---");
 		}
 		System.out.println("+");
 	}
 
-	// recursive perfect maze generator, using a modified DFS
+	// Recursive perfect maze generator, using a modified DFS
 	// (cx,cy) coordinates of current cell, and (nx,ny) coordinates of neighbor cell
 	private void generateMaze(int cx, int cy) {
 		DIR[] dirs = DIR.values();
 		Collections.shuffle(Arrays.asList(dirs));
 		for (DIR dir : dirs) {
-			// find neighbor cell
+			// Dinds neighbor cell
 			int nx = cx + dir.dx;
 			int ny = cy + dir.dy;
-			// if neighbor exists and not visited
+			// If neighbor exists and not visited
 			if (between(nx, r) && between(ny, r) && (maze[nx][ny] == 0)) {
-				// remove walls
-				// update current cell using or (|) bit operations
-				// example if a cell has north (1) and south (2) neighbor openings, maze holds 3
-				// example if a cell has east (4) and west (8) neighbor openings, maze holds 12
+				// Removes walls
+				// Updates current cell using or (|) bit operations
+				// Example: if a cell has north (1) and south (2) neighbor openings, maze holds 3
+				// Example: if a cell has east (4) and west (8) neighbor openings, maze holds 12
 
 				maze[cx][cy] |= dir.bit;
-				// update neighbor cell
+				// Updates neighbor cell
 				maze[nx][ny] |= dir.opposite.bit;
-				// recursive call to neighbor cell
+				// Recursive call to neighbor cell
 				generateMaze(nx, ny);
 			}
 		}
 	}
 
-	// prints the value of maze array
+	// Prints the value of maze array
 	public void displayCells() {
 		for (int i = 0; i < r; i++) {
 			for (int j = 0; j < r; j++)
@@ -151,7 +151,7 @@ public class MazeGenerator {
 		}
 	}
 
-	// checks if 0<=v<upper
+	// Checks if 0<=v<upper
 	private static boolean between(int v, int upper) {
 		return (v >= 0) && (v < upper);
 	}
@@ -160,7 +160,7 @@ public class MazeGenerator {
 	private enum DIR {
 		// direction(bit, column move, row move)
 		// bit 1 is North, 2 is South, 4 is East and 8 is West
-		// example North N(1,0,-1).
+		// Example: North N(1,0,-1).
 		N(1, -1, 0), S(2, 1, 0), E(4, 0, 1), W(8, 0, -1);
 
 		private final int bit;
@@ -168,7 +168,7 @@ public class MazeGenerator {
 		private final int dy;
 		private DIR opposite;
 
-		// use the static initializer to resolve forward references
+		// Uses the static initializer to resolve forward references
 		static {
 			N.opposite = S;
 			S.opposite = N;
@@ -185,7 +185,7 @@ public class MazeGenerator {
 	};
 
 	/**
-	 * convert x-y coordinate to 1 digit
+	 * Converts x-y coordinate to 1 digit
 	 * 
 	 * @param x
 	 * @param y
@@ -198,7 +198,7 @@ public class MazeGenerator {
 	}
 
 	/**
-	 * convert 1 digit to x-y coordinate
+	 * Converts 1 digit to x-y coordinate
 	 * 
 	 * @param num
 	 * @param n
