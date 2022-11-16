@@ -27,6 +27,24 @@ public class MazeGenerator {
 		setAdj();
 	}
 
+	public MazeGenerator(String maze, int r) {
+		this.r = r;
+		this.maze = new int[this.r][this.r];
+		cells = new ArrayList<LinkedList<Integer>>(r * r);
+		for (int i = 0; i < r * r; i++) {
+			cells.add(new LinkedList<Integer>());
+		}
+
+		// TODO convert string to maze
+		setAdj();
+	}
+
+	private void convertStringToMaze(String maze) {
+
+		System.out.println(maze.toString());
+
+	}
+
 	/**
 	 * Sets up adjacency list cells
 	 */
@@ -55,20 +73,23 @@ public class MazeGenerator {
 		for (int i = 0; i < r; i++) {
 			// Draws the north edge
 			for (int j = 0; j < r; j++) {
-				System.out.print((maze[i][j] & 1) == 0 ? "+---" : "+   ");
+				if (i == 0 && j == 0) 
+					System.out.print("+ ");
+				else 
+					System.out.print((maze[i][j] & 1) == 0 ? "+-" : "+ ");
 			}
 			System.out.println("+");
 			// Draws the west edge
 			for (int j = 0; j < r; j++) {
-				System.out.print((maze[i][j] & 8) == 0 ? "|   " : "    ");
+				System.out.print((maze[i][j] & 8) == 0 ? "| " : "  ");
 			}
 			System.out.println("|");
 		}
 		// Draws the bottom line
-		for (int j = 0; j < r; j++) {
-			System.out.print("+---");
+		for (int j = 0; j < r - 1; j++) {
+			System.out.print("+-");
 		}
-		System.out.println("+");
+		System.out.println("+ +");
 	}
 
 	// Prints the maze with the cells and walls removed
@@ -76,22 +97,25 @@ public class MazeGenerator {
 		for (int i = 0; i < r; i++) {
 			// Draws the north edge
 			for (int j = 0; j < r; j++) {
-				System.out.print((maze[i][j] & 1) == 0 ? "+---" : "+   ");
+				if (i == 0 && j == 0) 
+					System.out.print("+ ");
+				else 
+					System.out.print((maze[i][j] & 1) == 0 ? "+-" : "+ ");
 			}
 			System.out.println("+");
 			// Draws the west edge
 			for (int j = 0; j < r; j++) {
 				int num = getNumByXY(j, i, r);
 				String temp = discoverTime[num] >= 0 ? discoverTime[num] % 10 + "" : " ";
-				System.out.print((maze[i][j] & 8) == 0 ? "| " + temp + " " : "  " + temp + " ");
+				System.out.print((maze[i][j] & 8) == 0 ? "|" + temp + "" : " " + temp + "");
 			}
 			System.out.println("|");
 		}
 		// Draws the bottom line
-		for (int j = 0; j < r; j++) {
-			System.out.print("+---");
+		for (int j = 0; j < r - 1; j++) {
+			System.out.print("+-");
 		}
-		System.out.println("+");
+		System.out.println("+ +");
 	}
 
 	// Prints the maze with the cells and walls removed
@@ -99,22 +123,26 @@ public class MazeGenerator {
 		for (int i = 0; i < r; i++) {
 			// Draws the north edge
 			for (int j = 0; j < r; j++) {
-				System.out.print((maze[i][j] & 1) == 0 ? "+---" : "+   ");
+				if (i == 0 && j == 0) 
+					System.out.print("+ ");
+				else 
+					System.out.print((maze[i][j] & 1) == 0 ? "+-" : "+ ");
+				
 			}
 			System.out.println("+");
 			// Draws the west edge
 			for (int j = 0; j < r; j++) {
 				int num = getNumByXY(j, i, r);
 				String temp = path.contains(num) ? "#" + "" : " ";
-				System.out.print((maze[i][j] & 8) == 0 ? "| " + temp + " " : "  " + temp + " ");
+				System.out.print((maze[i][j] & 8) == 0 ? "|" + temp + "" : " " + temp + "");
 			}
 			System.out.println("|");
 		}
 		// Draws the bottom line
-		for (int j = 0; j < r; j++) {
-			System.out.print("+---");
+		for (int j = 0; j < r - 1; j++) {
+			System.out.print("+-");
 		}
-		System.out.println("+");
+		System.out.println("+ +");
 	}
 
 	// Recursive perfect maze generator, using a modified DFS
@@ -130,7 +158,8 @@ public class MazeGenerator {
 			if (between(nx, r) && between(ny, r) && (maze[nx][ny] == 0)) {
 				// Removes walls
 				// Updates current cell using or (|) bit operations
-				// Example: if a cell has north (1) and south (2) neighbor openings, maze holds 3
+				// Example: if a cell has north (1) and south (2) neighbor openings, maze holds
+				// 3
 				// Example: if a cell has east (4) and west (8) neighbor openings, maze holds 12
 
 				maze[cx][cy] |= dir.bit;

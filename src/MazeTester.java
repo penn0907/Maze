@@ -44,6 +44,7 @@ class MazeTester {
 	void test() {
 		System.out.println("First Test...");
 		System.out.println(Arrays.toString(mazes));
+		System.out.println(mazes[0]);
 	}
 
 }

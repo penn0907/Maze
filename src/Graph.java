@@ -211,13 +211,13 @@ public class Graph {
 		maze.displayMazeVisited(discoverTime);
 		System.out.println();
 		maze.displayShortestPath(path);
-		System.out.println("Length of path: " + path.size());
 		displayPath();
+		System.out.println("Length of path: " + path.size());
 		System.out.println("Visited cells: " + visitCount);
 	}
 	
 	public static void main(String[] args) {
-		Graph a1 = new Graph(10);
+		Graph a1 = new Graph(4);
 		Graph a2 = a1;
 		a1.DFSPath();
 		a2.BFSPath();
