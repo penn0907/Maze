@@ -1,24 +1,24 @@
+
 /*
  * Name(s): Kevin Boc and Yupeng Ni
  * Date: 11/12/2022
  */
 import java.util.*;
 
-
- //The Graph class creates a graph representation of the generated maze, where adjacency linked lists 
- //show the connections each of each vertex. There are two search methods, depth first search and 
- //breadth first search.
+//The Graph class creates a graph representation of the generated maze, where adjacency linked lists 
+//show the connections each of each vertex. There are two search methods, depth first search and 
+//breadth first search.
 public class Graph {
-	
-	//Instance Variables
+
+	// Instance Variables
 	private int r;
-	private int start; 
+	private int start;
 	private int dest;
 	private int visitCount;
 	private int discoverTimeCount;
-	
+
 	private MazeGenerator maze;
-	
+
 	private int[] dist;
 	private int[] discoverTime;
 	private int[] parent;
@@ -27,7 +27,7 @@ public class Graph {
 	private LinkedList<Integer> path;
 
 	private ArrayList<LinkedList<Integer>> cells;
-	
+
 	/**
 	 * Constructs a graph model of the maze that has r^2 cells
 	 * 
@@ -39,28 +39,38 @@ public class Graph {
 		this.cells = maze.getCells();
 
 		initialization();
-		
+
 		maze.displayMaze();
 	}
-	
+
+	public Graph(int r, String mazeStr) {
+		this.r = r;
+		this.maze = new MazeGenerator(r, mazeStr);
+		this.cells = maze.getCells();
+
+		initialization();
+
+		maze.displayMaze();
+	}
+
 	/**
 	 * Initializes all the instance variables of its respective graph object
 	 * 
 	 */
 	private void initialization() {
-		visitCount = 0; 
+		visitCount = 0;
 		discoverTimeCount = 0;
 		start = 0;
 		dest = cells.size() - 1;
-	
+
 		dist = new int[cells.size()];
 		discoverTime = new int[cells.size()];
-		
+
 		parent = new int[cells.size()];
 		visit = new boolean[cells.size()];
-		
+
 		path = new LinkedList<Integer>();
-		
+
 		for (int i = 0; i < cells.size(); i++) {
 			dist[i] = -1;
 			discoverTime[i] = -1;
@@ -70,30 +80,30 @@ public class Graph {
 	}
 
 	/**
-	 * Function that calls the breadth-first search and printing result methods.
-	 * It also calculates the shortest path given the path BFS took.
+	 * Function that calls the breadth-first search and printing result methods. It
+	 * also calculates the shortest path given the path BFS took.
 	 * 
 	 */
 	public void BFSPath() {
-		//Restore the variables
+		// Restore the variables
 		initialization();
 		BFS();
 
 		int temp = dest;
 		path.add(temp);
-		
+
 		while (parent[temp] != -1) {
 			path.add(parent[temp]);
 			temp = parent[temp];
 		}
-		
-		printResult();
+
+		printResult("BFS");
 	}
 
 	/**
-	 * Function that searches the graph representation of the maze for its destination
-	 * using breadth-first-search. It measures the count of visited vertices and its order.
-	 * It also calculates the length of the shortest path.
+	 * Function that searches the graph representation of the maze for its
+	 * destination using breadth-first-search. It measures the count of visited
+	 * vertices and its order. It also calculates the length of the shortest path.
 	 * 
 	 */
 	public void BFS() {
@@ -103,7 +113,7 @@ public class Graph {
 		visitCount++;
 		dist[start] = 0;
 		discoverTime[start] = 0;
-		
+
 		queue.add(start);
 
 		while (!queue.isEmpty()) {
@@ -117,67 +127,67 @@ public class Graph {
 					discoverTime[adj] = ++discoverTimeCount;
 					parent[adj] = q;
 					queue.add(adj);
-					
+
 					if (adj == dest)
 						return;
 				}
 			}
 		}
 	}
-	
+
 	/**
-	 * Function that calls the depth-first search and printing result methods.
-	 * The implementation of DFS is the use of a data structure, Stack.
-	 * It also calculates the shortest path and its length given the path DFS took.
+	 * Function that calls the depth-first search and printing result methods. The
+	 * implementation of DFS is the use of a data structure, Stack. It also
+	 * calculates the shortest path and its length given the path DFS took.
 	 * 
 	 */
 	public void DFSPath() {
 		initialization();
-		
+
 		Stack<Integer> stack = new Stack<>();
-		
+
 		stack.push(start);
-		
+
 		boolean found = false;
-		
+
 		DFS(stack, found);
-		
+
 		int temp = dest;
-		path.add(temp); //path size is the length of the shortest path
-		
+		path.add(temp); // path size is the length of the shortest path
+
 		while (parent[temp] != -1) {
 			path.add(parent[temp]);
 			temp = parent[temp];
 		}
-		
-		printResult();
- 	}
-	
+
+		printResult("DFS");
+	}
+
 	/**
-	 * Function that searches the graph representation of the maze for its destination
-	 * using depth-first-search. It measures the count of visited vertices and its order.
+	 * Function that searches the graph representation of the maze for its
+	 * destination using depth-first-search. It measures the count of visited
+	 * vertices and its order.
 	 * 
 	 */
 	public void DFS(Stack<Integer> stack, boolean found) {
-		if(!found) {
+		if (!found) {
 			int visited = stack.pop();
-			
+
 			discoverTime[visited] = discoverTimeCount;
 			discoverTimeCount++;
 			visit[visited] = true;
 			visitCount++;
-			dist[visited]++; 
-			
-			LinkedList<Integer> adj = cells.get(visited);
-			
-			if(visited == dest) {
-				found = true;
-			}
-			else {
+			dist[visited]++;
 
-				for(int j = 0; j < adj.size(); j++) {
+			LinkedList<Integer> adj = cells.get(visited);
+
+			if (visited == dest) {
+				found = true;
+			} else {
+
+				for (int j = 0; j < adj.size(); j++) {
 					int curr = adj.get(j);
-					if(!visit[curr]) {
+					if (!visit[curr]) {
 						stack.push(curr);
 						parent[curr] = visited;
 					}
@@ -186,7 +196,7 @@ public class Graph {
 			}
 		}
 	}
-	
+
 	/**
 	 * Prints out and displays the shortest path in coordinates.
 	 * 
@@ -200,14 +210,14 @@ public class Graph {
 		}
 		System.out.println();
 	}
-	
+
 	/**
-	 * Prints out the results of DFS (Path Order, Shortest Path using #, Shortest Path Length,
-	 * and Number of Visited Vertices/Cells)
+	 * Prints out the results of DFS (Path Order, Shortest Path using #, Shortest
+	 * Path Length, and Number of Visited Vertices/Cells)
 	 * 
 	 */
-	public void printResult() {
-		System.out.println("DFS:");
+	public void printResult(String methodName) {
+		System.out.println(methodName + ":");
 		maze.displayMazeVisited(discoverTime);
 		System.out.println();
 		maze.displayShortestPath(path);
@@ -215,7 +225,7 @@ public class Graph {
 		System.out.println("Length of path: " + path.size());
 		System.out.println("Visited cells: " + visitCount);
 	}
-	
+
 	public static void main(String[] args) {
 		Graph a1 = new Graph(4);
 		Graph a2 = a1;

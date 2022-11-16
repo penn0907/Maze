@@ -27,7 +27,13 @@ public class MazeGenerator {
 		setAdj();
 	}
 
-	public MazeGenerator(String maze, int r) {
+	/**
+	 * Constructor use a maze string
+	 * 
+	 * @param maze string maze
+	 * @param r    size
+	 */
+	public MazeGenerator(int r, String maze) {
 		this.r = r;
 		this.maze = new int[this.r][this.r];
 		cells = new ArrayList<LinkedList<Integer>>(r * r);
@@ -35,13 +41,39 @@ public class MazeGenerator {
 			cells.add(new LinkedList<Integer>());
 		}
 
-		// TODO convert string to maze
+		// convert string to maze
+		convertStringToMaze(maze);
 		setAdj();
 	}
 
-	private void convertStringToMaze(String maze) {
+	/**
+	 * convert string maze into this
+	 * 
+	 * @param maze
+	 */
+	private void convertStringToMaze(String mazeStr) {
+		String[] lines = mazeStr.split("\n");
 
-		System.out.println(maze.toString());
+		int lineCount = 1;
+		for (int i = 0; i < r; i++) {
+			int charCount = 1;
+			for (int j = 0; j < r; j++) {
+				if (lines[lineCount - 1].charAt(charCount) == ' ') {
+					maze[i][j] += 1;
+				}
+				if (lines[lineCount + 1].charAt(charCount) == ' ') {
+					maze[i][j] += 2;
+				}
+				if (lines[lineCount].charAt(charCount - 1) == ' ') {
+					maze[i][j] += 8;
+				}
+				if (lines[lineCount].charAt(charCount + 1) == ' ') {
+					maze[i][j] += 4;
+				}
+				charCount += 2;
+			}
+			lineCount += 2;
+		}
 
 	}
 
@@ -53,16 +85,24 @@ public class MazeGenerator {
 			for (int j = 0; j < r; j++) {
 				int num = getNumByXY(j, i, r);
 				if ((maze[i][j] & 1) != 0) {
-					cells.get(num).add(getNumByXY(j, i - 1, r));
+					int neighbor = getNumByXY(j, i - 1, r);
+					if (neighbor >= 0)
+						cells.get(num).add(neighbor);
 				}
 				if ((maze[i][j] & 2) != 0) {
-					cells.get(num).add(getNumByXY(j, i + 1, r));
+					int neighbor = getNumByXY(j, i + 1, r);
+					if (neighbor >= 0)
+						cells.get(num).add(neighbor);
 				}
 				if ((maze[i][j] & 4) != 0) {
-					cells.get(num).add(getNumByXY(j + 1, i, r));
+					int neighbor = getNumByXY(j + 1, i, r);
+					if (neighbor >= 0)
+						cells.get(num).add(neighbor);
 				}
 				if ((maze[i][j] & 8) != 0) {
-					cells.get(num).add(getNumByXY(j - 1, i, r));
+					int neighbor = getNumByXY(j - 1, i, r);
+					if (neighbor >= 0)
+						cells.get(num).add(neighbor);
 				}
 			}
 		}
@@ -73,9 +113,9 @@ public class MazeGenerator {
 		for (int i = 0; i < r; i++) {
 			// Draws the north edge
 			for (int j = 0; j < r; j++) {
-				if (i == 0 && j == 0) 
+				if (i == 0 && j == 0)
 					System.out.print("+ ");
-				else 
+				else
 					System.out.print((maze[i][j] & 1) == 0 ? "+-" : "+ ");
 			}
 			System.out.println("+");
@@ -97,9 +137,9 @@ public class MazeGenerator {
 		for (int i = 0; i < r; i++) {
 			// Draws the north edge
 			for (int j = 0; j < r; j++) {
-				if (i == 0 && j == 0) 
+				if (i == 0 && j == 0)
 					System.out.print("+ ");
-				else 
+				else
 					System.out.print((maze[i][j] & 1) == 0 ? "+-" : "+ ");
 			}
 			System.out.println("+");
@@ -123,11 +163,11 @@ public class MazeGenerator {
 		for (int i = 0; i < r; i++) {
 			// Draws the north edge
 			for (int j = 0; j < r; j++) {
-				if (i == 0 && j == 0) 
+				if (i == 0 && j == 0)
 					System.out.print("+ ");
-				else 
+				else
 					System.out.print((maze[i][j] & 1) == 0 ? "+-" : "+ ");
-				
+
 			}
 			System.out.println("+");
 			// Draws the west edge
