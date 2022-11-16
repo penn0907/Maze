@@ -16,7 +16,7 @@ public class Graph {
 	private int dest;
 	private int visitCount;
 	private int discoverTimeCount;
-
+	
 	private MazeGenerator maze;
 
 	private int[] dist;
@@ -231,6 +231,7 @@ public class Graph {
 	 * 
 	 */
 	public void displayPath() {
+		
 		System.out.print("Path :");
 		for (int i = path.size() - 1; i >= 0; i--) {
 			int num = path.get(i);
@@ -276,5 +277,14 @@ public class Graph {
 	 */
 	public LinkedList<Integer> getPath() {
 		return path;
+	}
+	
+	/**
+	 * Returns the maze
+	 * 
+	 * @return the maze
+	 */
+	public MazeGenerator getMaze() {
+		return maze;
 	}
 }

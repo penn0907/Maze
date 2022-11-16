@@ -5,14 +5,18 @@ import java.util.*;
 
 class MazeTester {
 
-	private String[] mazes;
-	private static final int[] sizes = { 4, 6, 8, 10, 20 };
-	private static final int[] expectedLength = {13, 15, 45, 21, 61};
+	private String[] mazes; //Stores Mazes Of The Sample Inputs
+	private String[] bfsSolutions; //Stores Solved Mazes Of The Sample Inputs Using BFS
+	private String[] dfsSolutions; //Stores Solved Mazes Of The Sample Inputs Using DFS
+	private static final int[] sizes = {4, 6, 8, 10, 20}; //Sizes Of The Sample Inputs
+	private static final int[] expectedLength = {13, 15, 45, 21, 61}; //Expected Lengths OF The Sample Inputs With Respect Of Their Sizes
 
 	@BeforeEach
 	void setUp() {
 		try {
 			mazes = new String[sizes.length];
+			bfsSolutions = new String[sizes.length];
+			dfsSolutions = new String[sizes.length];
 			for (int i = 0; i < sizes.length; i++) {
 				String maze = "";
 				File file = new File("maze" + sizes[i] + ".txt");
@@ -42,14 +46,24 @@ class MazeTester {
 		LinkedList<Integer> bfsPath, dfsPath;
 		
 		for(int i = 0; i < sizes.length; i ++) {
+			//Size Test Indicator
 			System.out.println("Testing Maze " + sizes[i] + ": \n");
 			g = new Graph(sizes[i], mazes[i]);
+			
+			//BFS Test
 			g.BFSPath();
+			bfsSolutions[i] = g.getMaze().getSolvedMaze();
 			bfsPath = g.getPath();
 			assertEquals(g.getShortestPathLength(), expectedLength[i]);
+			
+			//DFS Test
 			g.DFSPath();
+			dfsSolutions[i] = g.getMaze().getSolvedMaze();
 			dfsPath = g.getPath();
 			assertEquals(g.getShortestPathLength(), expectedLength[i]);
+			
+			//DFS and BFS Solutions Test
+			assertEquals(dfsSolutions[i], bfsSolutions[i]);
 			assertTrue(bfsPath.toString().equals(dfsPath.toString()));
 		}
 		
@@ -66,5 +80,4 @@ class MazeTester {
 		g.DFSPath();
 		assertEquals(g.getShortestPathLength(), 0);
 	}
-
 }
