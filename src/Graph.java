@@ -87,7 +87,7 @@ public class Graph {
 			temp = parent[temp];
 		}
 		
-		printBFSResult();
+		printResult();
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class Graph {
 			temp = parent[temp];
 		}
 		
-		printDFSResult();
+		printResult();
  	}
 	
 	/**
@@ -202,26 +202,11 @@ public class Graph {
 	}
 	
 	/**
-	 * Prints out the results of BFS (Path Order, Shortest Path using #, Shortest Path Length,
-	 * and Number of Visited Vertices/Cells)
-	 * 
-	 */
-	public void printBFSResult() {
-		System.out.println("BFS:");
-		maze.displayMazeVisited(discoverTime);
-		System.out.println();
-		maze.displayShortestPath(path);
-		System.out.println("Length of path: " + (dist[dest] + 1));
-		displayPath();
-		System.out.println("Visited cells: " + visitCount);
-	}
-	
-	/**
 	 * Prints out the results of DFS (Path Order, Shortest Path using #, Shortest Path Length,
 	 * and Number of Visited Vertices/Cells)
 	 * 
 	 */
-	public void printDFSResult() {
+	public void printResult() {
 		System.out.println("DFS:");
 		maze.displayMazeVisited(discoverTime);
 		System.out.println();
@@ -232,7 +217,7 @@ public class Graph {
 	}
 	
 	public static void main(String[] args) {
-		Graph a1 = new Graph(5);
+		Graph a1 = new Graph(10);
 		Graph a2 = a1;
 		a1.DFSPath();
 		a2.BFSPath();
