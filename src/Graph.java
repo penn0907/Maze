@@ -34,23 +34,39 @@ public class Graph {
 	 * @param r the side lengths of the maze (r by r maze)
 	 */
 	public Graph(int r) {
-		this.r = r;
-		this.maze = new MazeGenerator(r);
-		this.cells = maze.getCells();
+		if(r > 0) {
+			this.r = r;
+			this.maze = new MazeGenerator(r);
+			this.cells = maze.getCells();
 
-		initialization();
+			initialization();
 
-		maze.displayMaze();
+			maze.displayMaze();
+		}
+		else {
+			System.out.println("Invalid size!");
+		}
 	}
 
+	/**
+	 * Constructs a graph model of the maze given a string of the maze
+	 * 
+	 * @param r the side lengths of the maze (r by r maze)
+	 * @param mazeStr string representation of the maze
+	 */
 	public Graph(int r, String mazeStr) {
-		this.r = r;
-		this.maze = new MazeGenerator(r, mazeStr);
-		this.cells = maze.getCells();
+		if(r > 0) {
+			this.r = r;
+			this.maze = new MazeGenerator(r, mazeStr);
+			this.cells = maze.getCells();
 
-		initialization();
+			initialization();
 
-		maze.displayMaze();
+			maze.displayMaze();
+		}
+		else {
+			System.out.println("Invalid size!");
+		}
 	}
 
 	/**
@@ -86,18 +102,23 @@ public class Graph {
 	 */
 	public void BFSPath() {
 		// Restore the variables
-		initialization();
-		BFS();
+		if(r > 0) {
+			initialization();
+			BFS();
 
-		int temp = dest;
-		path.add(temp);
+			int temp = dest;
+			path.add(temp);
 
-		while (parent[temp] != -1) {
-			path.add(parent[temp]);
-			temp = parent[temp];
+			while (parent[temp] != -1) {
+				path.add(parent[temp]);
+				temp = parent[temp];
+			}
+
+			printResult("BFS");
 		}
-
-		printResult("BFS");
+		else {
+			System.out.println("Invalid Size!");
+		}
 	}
 
 	/**
@@ -142,31 +163,39 @@ public class Graph {
 	 * 
 	 */
 	public void DFSPath() {
-		initialization();
+		if(r > 0) {
+			initialization();
 
-		Stack<Integer> stack = new Stack<>();
+			Stack<Integer> stack = new Stack<>();
 
-		stack.push(start);
+			stack.push(start);
 
-		boolean found = false;
+			boolean found = false;
 
-		DFS(stack, found);
+			DFS(stack, found);
 
-		int temp = dest;
-		path.add(temp); // path size is the length of the shortest path
+			int temp = dest;
+			path.add(temp); // path size is the length of the shortest path
 
-		while (parent[temp] != -1) {
-			path.add(parent[temp]);
-			temp = parent[temp];
+			while (parent[temp] != -1) {
+				path.add(parent[temp]);
+				temp = parent[temp];
+			}
+
+			printResult("DFS");
 		}
-
-		printResult("DFS");
+		else {
+			System.out.println("Invalid Size!");
+		}
 	}
 
 	/**
 	 * Function that searches the graph representation of the maze for its
 	 * destination using depth-first-search. It measures the count of visited
 	 * vertices and its order.
+	 * 
+	 * @param stack the stack of vertices/cells
+	 * @param found the boolean variable of reaching the destination or not
 	 * 
 	 */
 	public void DFS(Stack<Integer> stack, boolean found) {
@@ -201,7 +230,7 @@ public class Graph {
 	 * Prints out and displays the shortest path in coordinates.
 	 * 
 	 */
-	private void displayPath() {
+	public void displayPath() {
 		System.out.print("Path :");
 		for (int i = path.size() - 1; i >= 0; i--) {
 			int num = path.get(i);
@@ -215,6 +244,8 @@ public class Graph {
 	 * Prints out the results of DFS (Path Order, Shortest Path using #, Shortest
 	 * Path Length, and Number of Visited Vertices/Cells)
 	 * 
+	 * @param methodName the method used to search the maze
+	 * 
 	 */
 	public void printResult(String methodName) {
 		System.out.println(methodName + ":");
@@ -225,11 +256,25 @@ public class Graph {
 		System.out.println("Length of path: " + path.size());
 		System.out.println("Visited cells: " + visitCount);
 	}
-
-	public static void main(String[] args) {
-		Graph a1 = new Graph(4);
-		Graph a2 = a1;
-		a1.DFSPath();
-		a2.BFSPath();
+	
+	/**
+	 * Returns the length of the shortest path
+	 * 
+	 * @return the length of the shortest path
+	 */
+	public int getShortestPathLength() {
+		if(r > 0) {
+			return path.size();
+		}
+		else return 0;
+	}
+	
+	/**
+	 * Returns the path as a linked list of integers
+	 * 
+	 * @return the path as a linked list of integers
+	 */
+	public LinkedList<Integer> getPath() {
+		return path;
 	}
 }

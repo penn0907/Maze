@@ -6,12 +6,12 @@ import java.util.*;
 class MazeTester {
 
 	private String[] mazes;
+	private static final int[] sizes = { 4, 6, 8, 10, 20 };
+	private static final int[] expectedLength = {13, 15, 45, 21, 61};
 
 	@BeforeEach
 	void setUp() {
-		System.out.println("Starting Set Up...");
 		try {
-			int[] sizes = { 4, 6, 8, 10, 20 };
 			mazes = new String[sizes.length];
 			for (int i = 0; i < sizes.length; i++) {
 				String maze = "";
@@ -33,21 +33,38 @@ class MazeTester {
 		}
 
 	}
-
-	@AfterEach
-	void tearDown() throws Exception {
-	}
-
+	
 	@Test
 	void test() {
-		// System.out.println("First Test...");
-		// System.out.println(Arrays.toString(mazes));
 		
-		Graph g = new Graph(4, mazes[0]);
+		//Given input tests
+		Graph g;
+		LinkedList<Integer> bfsPath, dfsPath;
 		
+		for(int i = 0; i < sizes.length; i ++) {
+			System.out.println("Testing Maze " + sizes[i] + ": \n");
+			g = new Graph(sizes[i], mazes[i]);
+			g.BFSPath();
+			bfsPath = g.getPath();
+			assertEquals(g.getShortestPathLength(), expectedLength[i]);
+			g.DFSPath();
+			dfsPath = g.getPath();
+			assertEquals(g.getShortestPathLength(), expectedLength[i]);
+			assertTrue(bfsPath.toString().equals(dfsPath.toString()));
+		}
+		
+		//Edge Cases
+		g = new Graph(1); //Maze size of 1
 		g.BFSPath();
+		assertEquals(g.getShortestPathLength(), 1);
 		g.DFSPath();
+		assertEquals(g.getShortestPathLength(), 1);
 		
+		g = new Graph(0); //Maze size of 0
+		g.BFSPath();
+		assertEquals(g.getShortestPathLength(), 0);
+		g.DFSPath();
+		assertEquals(g.getShortestPathLength(), 0);
 	}
 
 }

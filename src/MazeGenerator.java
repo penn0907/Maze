@@ -1,7 +1,4 @@
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 /*
  * recursive backtracking algorithm
@@ -11,6 +8,7 @@ import java.util.Arrays;
 public class MazeGenerator {
 	// Coordinates row x, column y
 	private final int r;
+	
 	// Stores the cells
 	private final int[][] maze;
 	private ArrayList<LinkedList<Integer>> cells;
@@ -53,7 +51,6 @@ public class MazeGenerator {
 	 */
 	private void convertStringToMaze(String mazeStr) {
 		String[] lines = mazeStr.split("\n");
-
 		int lineCount = 1;
 		for (int i = 0; i < r; i++) {
 			int charCount = 1;
