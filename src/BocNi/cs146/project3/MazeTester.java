@@ -31,7 +31,7 @@ class MazeTester {
 		TEST_INPUT_EXPECTED_LENGTH.put(7, 19);
 		TEST_INPUT_EXPECTED_LENGTH.put(9, 39);
 	}
-
+ 
 	/**
 	 * create and save maze input in file for test, only run once
 	 */
