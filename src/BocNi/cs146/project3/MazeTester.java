@@ -161,5 +161,31 @@ class MazeTester {
 		}
 
 	}
-
+	
+	/**
+	 * Tests the time taken to use DFS and BFS 
+	 */
+	@Test
+	void testTime() {
+		int[] inputSizes = {10, 20, 30, 40, 50};
+		Graph g;
+		
+		for(int i = 0; i < inputSizes.length; i ++) {
+			System.out.println("Input Size: " + inputSizes[i]);
+			
+			g = new Graph(inputSizes[i]);
+			long startBFS = System.currentTimeMillis();
+			g.BFSPath();
+			long endBFS = System.currentTimeMillis();
+			long timeBFS = endBFS - startBFS;
+			System.out.println("BFS: " + timeBFS + " milliseconds");
+			
+			long startDFS = System.currentTimeMillis();
+			g.DFSPath();
+			long endDFS = System.currentTimeMillis();
+			long timeDFS = endDFS - startDFS;
+			System.out.println("DFS: " + timeDFS + " milliseconds");
+		}
+		
+	}
 }
