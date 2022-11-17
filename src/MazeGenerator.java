@@ -13,8 +13,11 @@ public class MazeGenerator {
 	private final int[][] maze;
 	private ArrayList<LinkedList<Integer>> cells;
 
-	//Solution of the maze
+	// Solution of the maze
 	private String solvedMaze;
+	
+	// Order of path in maze
+	private String orderMaze;
 	
 	// Constructor
 	public MazeGenerator(int r) {
@@ -134,27 +137,37 @@ public class MazeGenerator {
 
 	// Prints the maze with the cells and walls removed
 	public void displayMazeVisited(int[] discoverTime) {
+		orderMaze = "";
 		for (int i = 0; i < r; i++) {
 			// Draws the north edge
 			for (int j = 0; j < r; j++) {
-				if (i == 0 && j == 0)
+				if (i == 0 && j == 0) {
+					orderMaze += "+ ";
 					System.out.print("+ ");
-				else
+				}
+				else {
+					orderMaze += (maze[i][j] & 1) == 0 ? "+-" : "+ ";
 					System.out.print((maze[i][j] & 1) == 0 ? "+-" : "+ ");
+				}
 			}
+			orderMaze += "+\n";
 			System.out.println("+");
 			// Draws the west edge
 			for (int j = 0; j < r; j++) {
 				int num = getNumByXY(j, i, r);
 				String temp = discoverTime[num] >= 0 ? discoverTime[num] % 10 + "" : " ";
+				orderMaze += (maze[i][j] & 8) == 0 ? "|" + temp + "" : " " + temp + "";
 				System.out.print((maze[i][j] & 8) == 0 ? "|" + temp + "" : " " + temp + "");
 			}
+			orderMaze += "|\n";
 			System.out.println("|");
 		}
 		// Draws the bottom line
 		for (int j = 0; j < r - 1; j++) {
+			orderMaze += "+-";
 			System.out.print("+-");
 		}
+		orderMaze += "+ +\n";
 		System.out.println("+ +");
 	}
 
@@ -303,5 +316,14 @@ public class MazeGenerator {
 	 */
 	public String getSolvedMaze() {
 		return solvedMaze;
+	}
+	
+	/**
+	 * Returns the order of the path
+	 * 
+	 * @return the order of the path
+	 */
+	public String getOrderMaze() {
+		return orderMaze;
 	}
 }

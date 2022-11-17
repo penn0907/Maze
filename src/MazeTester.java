@@ -8,15 +8,22 @@ class MazeTester {
 	private String[] mazes; //Stores Mazes Of The Sample Inputs
 	private String[] bfsSolutions; //Stores Solved Mazes Of The Sample Inputs Using BFS
 	private String[] dfsSolutions; //Stores Solved Mazes Of The Sample Inputs Using DFS
+	private String[] bfsOrder; //Stores The Order Of The Sample Inputs Using BFS
+	private String[] dfsOrder; //Stores The Order Of The Sample Inputs Using DFS
+	
 	private static final int[] sizes = {4, 6, 8, 10, 20}; //Sizes Of The Sample Inputs
-	private static final int[] expectedLength = {13, 15, 45, 21, 61}; //Expected Lengths OF The Sample Inputs With Respect Of Their Sizes
-
+	private static final int[] expectedLength = {13, 15, 45, 21, 61}; //Expected Lengths Of The Sample Inputs With Respect Of Their Sizes
+	private static final int[] bfsVisitedCells = {0}; //BFS Visited Cells Of The Sample Inputs With Respect Of Their Sizes
+	private static final int[] dfsVisitedCells = {0}; //BFS Visited Cells Of The Sample Inputs With Respect Of Their Sizes
+	
 	@BeforeEach
 	void setUp() {
 		try {
 			mazes = new String[sizes.length];
 			bfsSolutions = new String[sizes.length];
 			dfsSolutions = new String[sizes.length];
+			bfsOrder = new String[sizes.length];
+			dfsOrder = new String[sizes.length];
 			for (int i = 0; i < sizes.length; i++) {
 				String maze = "";
 				File file = new File("maze" + sizes[i] + ".txt");
@@ -43,7 +50,6 @@ class MazeTester {
 		
 		//Given input tests
 		Graph g;
-		LinkedList<Integer> bfsPath, dfsPath;
 		
 		for(int i = 0; i < sizes.length; i ++) {
 			//Size Test Indicator
@@ -52,19 +58,18 @@ class MazeTester {
 			
 			//BFS Test
 			g.BFSPath();
+			bfsOrder[i] = g.getMaze().getOrderMaze();
 			bfsSolutions[i] = g.getMaze().getSolvedMaze();
-			bfsPath = g.getPath();
-			assertEquals(g.getShortestPathLength(), expectedLength[i]);
+			assertEquals(g.getShortestPathLength(), expectedLength[i]); //Length test
 			
 			//DFS Test
 			g.DFSPath();
+			dfsOrder[i] = g.getMaze().getOrderMaze();
 			dfsSolutions[i] = g.getMaze().getSolvedMaze();
-			dfsPath = g.getPath();
-			assertEquals(g.getShortestPathLength(), expectedLength[i]);
+			assertEquals(g.getShortestPathLength(), expectedLength[i]); //Length test
 			
 			//DFS and BFS Solutions Test
-			assertEquals(dfsSolutions[i], bfsSolutions[i]);
-			assertTrue(bfsPath.toString().equals(dfsPath.toString()));
+			assertEquals(dfsSolutions[i], bfsSolutions[i]); //BFS and DFS shortest path test
 		}
 		
 		//Edge Cases

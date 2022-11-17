@@ -71,7 +71,6 @@ public class Graph {
 
 	/**
 	 * Initializes all the instance variables of its respective graph object
-	 * 
 	 */
 	private void initialization() {
 		visitCount = 0;
@@ -98,7 +97,6 @@ public class Graph {
 	/**
 	 * Function that calls the breadth-first search and printing result methods. It
 	 * also calculates the shortest path given the path BFS took.
-	 * 
 	 */
 	public void BFSPath() {
 		// Restore the variables
@@ -125,7 +123,6 @@ public class Graph {
 	 * Function that searches the graph representation of the maze for its
 	 * destination using breadth-first-search. It measures the count of visited
 	 * vertices and its order. It also calculates the length of the shortest path.
-	 * 
 	 */
 	public void BFS() {
 		LinkedList<Integer> queue = new LinkedList<Integer>();
@@ -160,7 +157,6 @@ public class Graph {
 	 * Function that calls the depth-first search and printing result methods. The
 	 * implementation of DFS is the use of a data structure, Stack. It also
 	 * calculates the shortest path and its length given the path DFS took.
-	 * 
 	 */
 	public void DFSPath() {
 		if(r > 0) {
@@ -193,10 +189,9 @@ public class Graph {
 	 * Function that searches the graph representation of the maze for its
 	 * destination using depth-first-search. It measures the count of visited
 	 * vertices and its order.
-	 * 
+	 *
 	 * @param stack the stack of vertices/cells
 	 * @param found the boolean variable of reaching the destination or not
-	 * 
 	 */
 	public void DFS(Stack<Integer> stack, boolean found) {
 		if (!found) {
@@ -228,7 +223,6 @@ public class Graph {
 
 	/**
 	 * Prints out and displays the shortest path in coordinates.
-	 * 
 	 */
 	public void displayPath() {
 		
@@ -246,7 +240,6 @@ public class Graph {
 	 * Path Length, and Number of Visited Vertices/Cells)
 	 * 
 	 * @param methodName the method used to search the maze
-	 * 
 	 */
 	public void printResult(String methodName) {
 		System.out.println(methodName + ":");
