@@ -204,9 +204,9 @@ public class MazeSolver {
 	}
 
 	/**
-	 * Returns the output string of the maze not solved
+	 * Returns the output string of every aspect of the given file
 	 * 
-	 * @return the output string of the maze not solved
+	 * @return the output string of every aspect of the given file
 	 */
 	public String getOutputStr() {
 		return outputStr;
