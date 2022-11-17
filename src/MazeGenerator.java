@@ -8,14 +8,11 @@ import java.util.*;
 public class MazeGenerator {
 	// Coordinates row x, column y
 	private final int r;
-	
+
 	// Stores the cells
 	private final int[][] maze;
 	private ArrayList<LinkedList<Integer>> cells;
 
-	//Solution of the maze
-	private String solvedMaze;
-	
 	// Constructor
 	public MazeGenerator(int r) {
 		this.r = r;
@@ -86,112 +83,79 @@ public class MazeGenerator {
 				int num = getNumByXY(j, i, r);
 				if ((maze[i][j] & 1) != 0) {
 					int neighbor = getNumByXY(j, i - 1, r);
-					if (neighbor >= 0)
+					if (between(neighbor, r * r))
 						cells.get(num).add(neighbor);
 				}
 				if ((maze[i][j] & 2) != 0) {
 					int neighbor = getNumByXY(j, i + 1, r);
-					if (neighbor >= 0)
+					if (between(neighbor, r * r))
 						cells.get(num).add(neighbor);
 				}
 				if ((maze[i][j] & 4) != 0) {
 					int neighbor = getNumByXY(j + 1, i, r);
-					if (neighbor >= 0)
+					if (between(neighbor, r * r))
 						cells.get(num).add(neighbor);
 				}
 				if ((maze[i][j] & 8) != 0) {
 					int neighbor = getNumByXY(j - 1, i, r);
-					if (neighbor >= 0)
+					if (between(neighbor, r * r))
 						cells.get(num).add(neighbor);
 				}
 			}
 		}
 	}
 
-	// Prints the maze with the cells and walls removed
-	public void displayMaze() {
+	/**
+	 * display maze
+	 * @param type 	0:default	1:display visited path	2:display shortest path
+	 * @param list	visited path list or shortest path list
+	 * @return	maze String
+	 */
+	public String displayMaze(int type, List<Integer> list) {
+		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < r; i++) {
 			// Draws the north edge
 			for (int j = 0; j < r; j++) {
 				if (i == 0 && j == 0)
-					System.out.print("+ ");
+					sb.append("+ ");
 				else
-					System.out.print((maze[i][j] & 1) == 0 ? "+-" : "+ ");
+					sb.append((maze[i][j] & 1) == 0 ? "+-" : "+ ");
 			}
-			System.out.println("+");
-			// Draws the west edge
-			for (int j = 0; j < r; j++) {
-				System.out.print((maze[i][j] & 8) == 0 ? "| " : "  ");
-			}
-			System.out.println("|");
-		}
-		// Draws the bottom line
-		for (int j = 0; j < r - 1; j++) {
-			System.out.print("+-");
-		}
-		System.out.println("+ +");
-	}
-
-	// Prints the maze with the cells and walls removed
-	public void displayMazeVisited(int[] discoverTime) {
-		for (int i = 0; i < r; i++) {
-			// Draws the north edge
-			for (int j = 0; j < r; j++) {
-				if (i == 0 && j == 0)
-					System.out.print("+ ");
-				else
-					System.out.print((maze[i][j] & 1) == 0 ? "+-" : "+ ");
-			}
-			System.out.println("+");
+			sb.append("+").append("\n");
 			// Draws the west edge
 			for (int j = 0; j < r; j++) {
 				int num = getNumByXY(j, i, r);
-				String temp = discoverTime[num] >= 0 ? discoverTime[num] % 10 + "" : " ";
-				System.out.print((maze[i][j] & 8) == 0 ? "|" + temp + "" : " " + temp + "");
+				String temp = getCellFiller(type, list, num);
+				sb.append((maze[i][j] & 8) == 0 ? "|" + temp + "" : " " + temp + "");
 			}
-			System.out.println("|");
+			sb.append("|").append("\n");
 		}
 		// Draws the bottom line
 		for (int j = 0; j < r - 1; j++) {
-			System.out.print("+-");
+			sb.append("+-");
 		}
-		System.out.println("+ +");
+		sb.append("+ +").append("\n");
+		return sb.toString();
 	}
 
-	// Prints the maze with the cells and walls removed
-	public void displayShortestPath(LinkedList<Integer> path) {
-		solvedMaze = "";
-		for (int i = 0; i < r; i++) {
-			// Draws the north edge
-			for (int j = 0; j < r; j++) {
-				if (i == 0 && j == 0) {
-					solvedMaze += "+ ";
-					System.out.print("+ ");
-				}
-				else {
-					solvedMaze += (maze[i][j] & 1) == 0 ? "+-" : "+ ";
-					System.out.print((maze[i][j] & 1) == 0 ? "+-" : "+ ");
-				}
-			}
-			solvedMaze += "+\n";
-			System.out.println("+");
-			// Draws the west edge
-			for (int j = 0; j < r; j++) {
-				int num = getNumByXY(j, i, r);
-				String temp = path.contains(num) ? "#" + "" : " ";
-				solvedMaze += ((maze[i][j] & 8) == 0 ? "|" + temp + "" : " " + temp + "");
-				System.out.print((maze[i][j] & 8) == 0 ? "|" + temp + "" : " " + temp + "");
-			}
-			solvedMaze += "|\n";
-			System.out.println("|");
+	/**
+	 * get the symbol to fill the cell
+	 * @param type 	0:default	1:display visited path	2:display shortest path
+	 * @param list	visited path list or shortest path list
+	 * @param num	cell number
+	 * @return cell symbol
+	 */
+	private String getCellFiller(int type, List<Integer> list, int num) {
+		String temp = " ";
+		
+		if (type == 1) {
+			temp = list.get(num) >= 0 ? list.get(num) % 10 + "" : " ";
+			
+		} else if (type == 2) {
+			temp = list.contains(num) ? "#" + "" : " ";
 		}
-		// Draws the bottom line
-		for (int j = 0; j < r - 1; j++) {
-			solvedMaze += "+-";
-			System.out.print("+-");
-		}
-		solvedMaze += "+ +\n";
-		System.out.println("+ +");
+
+		return temp;
 	}
 
 	// Recursive perfect maze generator, using a modified DFS
@@ -217,15 +181,6 @@ public class MazeGenerator {
 				// Recursive call to neighbor cell
 				generateMaze(nx, ny);
 			}
-		}
-	}
-
-	// Prints the value of maze array
-	public void displayCells() {
-		for (int i = 0; i < r; i++) {
-			for (int j = 0; j < r; j++)
-				System.out.print(" " + maze[i][j]);
-			System.out.println();
 		}
 	}
 
@@ -296,12 +251,4 @@ public class MazeGenerator {
 		return cells;
 	}
 
-	/**
-	 * Returns the solved maze
-	 * 
-	 * @return the solved maze
-	 */
-	public String getSolvedMaze() {
-		return solvedMaze;
-	}
 }

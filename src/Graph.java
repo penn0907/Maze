@@ -15,12 +15,12 @@ public class Graph {
 	private int start;
 	private int dest;
 	private int visitCount;
-	private int discoverTimeCount;
-	
+	private Integer discoverTimeCount;
+
 	private MazeGenerator maze;
 
 	private int[] dist;
-	private int[] discoverTime;
+	private Integer[] discoverTime;
 	private int[] parent;
 	private boolean[] visit;
 
@@ -34,39 +34,26 @@ public class Graph {
 	 * @param r the side lengths of the maze (r by r maze)
 	 */
 	public Graph(int r) {
-		if(r > 0) {
-			this.r = r;
-			this.maze = new MazeGenerator(r);
-			this.cells = maze.getCells();
+		this.r = r;
+		this.maze = new MazeGenerator(r);
+		this.cells = maze.getCells();
 
-			initialization();
-
-			maze.displayMaze();
-		}
-		else {
-			System.out.println("Invalid size!");
-		}
+		initialization();
 	}
 
 	/**
 	 * Constructs a graph model of the maze given a string of the maze
 	 * 
-	 * @param r the side lengths of the maze (r by r maze)
+	 * @param r       the side lengths of the maze (r by r maze)
 	 * @param mazeStr string representation of the maze
 	 */
 	public Graph(int r, String mazeStr) {
-		if(r > 0) {
-			this.r = r;
-			this.maze = new MazeGenerator(r, mazeStr);
-			this.cells = maze.getCells();
+		this.r = r;
+		this.maze = new MazeGenerator(r, mazeStr);
+		this.cells = maze.getCells();
 
-			initialization();
+		initialization();
 
-			maze.displayMaze();
-		}
-		else {
-			System.out.println("Invalid size!");
-		}
 	}
 
 	/**
@@ -80,7 +67,7 @@ public class Graph {
 		dest = cells.size() - 1;
 
 		dist = new int[cells.size()];
-		discoverTime = new int[cells.size()];
+		discoverTime = new Integer[cells.size()];
 
 		parent = new int[cells.size()];
 		visit = new boolean[cells.size()];
@@ -100,25 +87,20 @@ public class Graph {
 	 * also calculates the shortest path given the path BFS took.
 	 * 
 	 */
-	public void BFSPath() {
+	public String BFSPath() {
 		// Restore the variables
-		if(r > 0) {
-			initialization();
-			BFS();
+		initialization();
+		BFS();
 
-			int temp = dest;
-			path.add(temp);
+		int temp = dest;
+		path.add(temp);
 
-			while (parent[temp] != -1) {
-				path.add(parent[temp]);
-				temp = parent[temp];
-			}
-
-			printResult("BFS");
+		while (parent[temp] != -1) {
+			path.add(parent[temp]);
+			temp = parent[temp];
 		}
-		else {
-			System.out.println("Invalid Size!");
-		}
+
+		return getOutputString("BFS");
 	}
 
 	/**
@@ -127,7 +109,7 @@ public class Graph {
 	 * vertices and its order. It also calculates the length of the shortest path.
 	 * 
 	 */
-	public void BFS() {
+	private void BFS() {
 		LinkedList<Integer> queue = new LinkedList<Integer>();
 
 		visit[start] = true;
@@ -162,31 +144,26 @@ public class Graph {
 	 * calculates the shortest path and its length given the path DFS took.
 	 * 
 	 */
-	public void DFSPath() {
-		if(r > 0) {
-			initialization();
+	public String DFSPath() {
+		initialization();
 
-			Stack<Integer> stack = new Stack<>();
+		Stack<Integer> stack = new Stack<>();
 
-			stack.push(start);
+		stack.push(start);
 
-			boolean found = false;
+		boolean found = false;
 
-			DFS(stack, found);
+		DFS(stack, found);
 
-			int temp = dest;
-			path.add(temp); // path size is the length of the shortest path
+		int temp = dest;
+		path.add(temp); // path size is the length of the shortest path
 
-			while (parent[temp] != -1) {
-				path.add(parent[temp]);
-				temp = parent[temp];
-			}
-
-			printResult("DFS");
+		while (parent[temp] != -1) {
+			path.add(parent[temp]);
+			temp = parent[temp];
 		}
-		else {
-			System.out.println("Invalid Size!");
-		}
+
+		return getOutputString("DFS");
 	}
 
 	/**
@@ -198,7 +175,7 @@ public class Graph {
 	 * @param found the boolean variable of reaching the destination or not
 	 * 
 	 */
-	public void DFS(Stack<Integer> stack, boolean found) {
+	private void DFS(Stack<Integer> stack, boolean found) {
 		if (!found) {
 			int visited = stack.pop();
 
@@ -227,49 +204,65 @@ public class Graph {
 	}
 
 	/**
-	 * Prints out and displays the shortest path in coordinates.
+	 * print maze
 	 * 
+	 * @return string of maze
 	 */
-	public void displayPath() {
-		
-		System.out.print("Path :");
-		for (int i = path.size() - 1; i >= 0; i--) {
-			int num = path.get(i);
-			int[] xy = maze.getXYbyNum(num, r);
-			System.out.print("(" + xy[0] + ", " + xy[1] + ") ");
-		}
-		System.out.println();
+	public String getMazeString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(maze.displayMaze(0, null));
+		sb.append("\n");
+		return sb.toString();
 	}
 
 	/**
-	 * Prints out the results of DFS (Path Order, Shortest Path using #, Shortest
+	 * Prints out and displays the shortest path in coordinates.
+	 * 
+	 */
+	public String displayPath() {
+		StringBuffer sb = new StringBuffer();
+		for (int i = path.size() - 1; i >= 0; i--) {
+			int num = path.get(i);
+			int[] xy = maze.getXYbyNum(num, r);
+			sb.append("(" + xy[0] + ", " + xy[1] + ") ");
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * assemble string of the results of DFS and BFS (Path Order, Shortest Path using #, Shortest
 	 * Path Length, and Number of Visited Vertices/Cells)
 	 * 
 	 * @param methodName the method used to search the maze
 	 * 
 	 */
-	public void printResult(String methodName) {
-		System.out.println(methodName + ":");
-		maze.displayMazeVisited(discoverTime);
-		System.out.println();
-		maze.displayShortestPath(path);
-		displayPath();
-		System.out.println("Length of path: " + path.size());
-		System.out.println("Visited cells: " + visitCount);
+	public String getOutputString(String methodName) {
+		StringBuffer sb = new StringBuffer();
+		sb.append(methodName).append(":\n");
+		List<Integer> list = Arrays.asList(discoverTime);
+		sb.append(maze.displayMaze(1, list));
+		sb.append("\n");
+		sb.append(maze.displayMaze(2, path));
+		sb.append("Path: ");
+		sb.append(displayPath());
+		sb.append("\n");
+		sb.append("Length of path: " + path.size());
+		sb.append("\n");
+		sb.append("Visited cells: " + visitCount);
+		sb.append("\n");
+		sb.append("\n");
+		return sb.toString();
 	}
-	
+
 	/**
-	 * Returns the length of the shortest path
+	 * get the maze string with shortest path
 	 * 
-	 * @return the length of the shortest path
+	 * @return maze String
 	 */
-	public int getShortestPathLength() {
-		if(r > 0) {
-			return path.size();
-		}
-		else return 0;
+	public String getShortestMazeStr() {
+		return maze.displayMaze(2,path);
 	}
-	
+
 	/**
 	 * Returns the path as a linked list of integers
 	 * 
@@ -278,13 +271,14 @@ public class Graph {
 	public LinkedList<Integer> getPath() {
 		return path;
 	}
-	
+
 	/**
-	 * Returns the maze
+	 * Get the visited cells count
 	 * 
-	 * @return the maze
+	 * @return visitedCount
 	 */
-	public MazeGenerator getMaze() {
-		return maze;
+	public int getVisitCount() {
+		return visitCount;
 	}
+
 }
