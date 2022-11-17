@@ -1,4 +1,9 @@
 package BocNi.cs146.project3;
+
+/*
+ * Name(s): Kevin Boc and Yupeng Ni
+ * Date: 11/12/2022
+ */
 import java.util.*;
 
 /*
@@ -165,7 +170,7 @@ public class MazeGenerator {
 		DIR[] dirs = DIR.values();
 		Collections.shuffle(Arrays.asList(dirs));
 		for (DIR dir : dirs) {
-			// Dinds neighbor cell
+			// Finds neighbor cell
 			int nx = cx + dir.dx;
 			int ny = cy + dir.dy;
 			// If neighbor exists and not visited

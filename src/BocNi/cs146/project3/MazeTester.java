@@ -1,4 +1,9 @@
 package BocNi.cs146.project3;
+
+/*
+ * Name(s): Kevin Boc and Yupeng Ni
+ * Date: 11/12/2022
+ */
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -9,6 +14,9 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+//This class tests the expected path length, linked list path, and string paths.
+//It tests the sample inputs and our randomly generated mazes. There are also
+//edge cases.
 class MazeTester {
 
 	// key - Sizes Of The Sample Inputs;

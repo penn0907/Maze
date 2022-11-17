@@ -1,4 +1,9 @@
 package BocNi.cs146.project3;
+
+/*
+ * Name(s): Kevin Boc and Yupeng Ni
+ * Date: 11/12/2022
+ */
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -6,8 +11,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
 
+//The Maze Solver class generates the random mazes given input sizes and writes them to files.
+//It also calls BFS and DFS to solve the mazes and store the solutions in the files.
 public class MazeSolver {
 
+	//Instance Variables
 	private Graph graph;
 
 	private int r;
@@ -141,30 +149,65 @@ public class MazeSolver {
 		return maze;
 	}
 
+	/**
+	 * Returns the Linked List representation of the BFS path
+	 * 
+	 * @return the BFS path
+	 */
 	public LinkedList<Integer> getBfsPath() {
 		return bfsPath;
 	}
 
+	/**
+	 * Returns the Linked List representation of the DFS path 
+	 * 
+	 * @return the DFS path
+	 */
 	public LinkedList<Integer> getDfsPath() {
 		return dfsPath;
 	}
 
+	/**
+	 * Returns the String representation of the BFS path 
+	 * 
+	 * @return the BFS path
+	 */
 	public String getBfsShortestMaze() {
 		return bfsShortestMaze;
 	}
 
+	/**
+	 * Returns the String representation of the DFS path 
+	 * 
+	 * @return the DFS path
+	 */
 	public String getDfsShortestMaze() {
 		return dfsShortestMaze;
 	}
 
+	/**
+	 * Returns the visited cells of the the BFS algo
+	 * 
+	 * @return the visited cells of the the BFS algo
+	 */
 	public int getBfsVisitedCells() {
 		return bfsVisitedCells;
 	}
 
+	/**
+	 * Returns the visited cells of the the DFS algo
+	 * 
+	 * @return the visited cells of the the DFS algo
+	 */
 	public int getDfsVisitedCells() {
 		return dfsVisitedCells;
 	}
 
+	/**
+	 * Returns the output string of the maze not solved
+	 * 
+	 * @return the output string of the maze not solved
+	 */
 	public String getOutputStr() {
 		return outputStr;
 	}
